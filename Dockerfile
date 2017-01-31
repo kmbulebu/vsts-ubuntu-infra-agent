@@ -28,6 +28,11 @@ RUN echo "deb [arch=amd64] http://apt-mo.trafficmanager.net/repos/dotnet-release
     ant \
     ant-optional \
     ruby \
+    ruby-dev \
+    libxml2-dev \
+    libxslt-dev \
+    zlib1g-dev \
+    nmap \
     golang \
     # .NET Core SDK
     dotnet-dev-1.0.0-rc3-004530 \
@@ -59,6 +64,8 @@ ENV ANT_HOME=/usr/share/ant \
     grunt=/usr/local/bin/grunt \
     JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 \
     M2_HOME=/usr/share/maven
+
+RUN gem install gauntlt --no-ri
 
 # Setup MSbuild alias (remove once we have this natively)
 RUN echo "alias msbuild='dotnet msbuild'" >> /etc/bash.bashrc
