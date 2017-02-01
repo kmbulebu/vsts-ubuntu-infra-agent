@@ -23,6 +23,10 @@ RUN echo "deb [arch=amd64] http://apt-mo.trafficmanager.net/repos/dotnet-release
     # Python
     python \
     python3 \
+    python-pip \
+    python-setuptools \
+    python-dev \
+    python3-dev \
     # Java and related build tools
     openjdk-8-jdk \
     ant \
@@ -63,10 +67,24 @@ ENV ANT_HOME=/usr/share/ant \
     GRADLE_HOME=/usr/share/gradle \
     grunt=/usr/local/bin/grunt \
     JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 \
-    M2_HOME=/usr/share/maven
+    M2_HOME=/usr/share/maven \
+    GOPATH=/go
 
-RUN gem install gauntlt --no-ri
+# Install gauntlt, arachni
+RUN gem install gauntlt arachni --no-ri
 
+# Configure go bin path
+ENV PATH=$PATH:/go/bin
+
+# Install heartbleed
+RUN /usr/bin/go get github.com/FiloSottile/Heartbleed
+
+# Install sslyze, and sqlmap
+RUN pip install --upgrade pip
+RUN pip install sqlmap
+RUN pip install sslyze
+
+# Forces first run which downloads and unpacks some stuff.
 RUN /usr/bin/dotnet msbuild /version
 
 # Setup MSbuild alias (remove once we have this natively)
