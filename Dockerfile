@@ -67,5 +67,7 @@ ENV ANT_HOME=/usr/share/ant \
 
 RUN gem install gauntlt --no-ri
 
+RUN /usr/bin/dotnet msbuild /version
+
 # Setup MSbuild alias (remove once we have this natively)
 RUN echo "alias msbuild='dotnet msbuild'" >> /etc/bash.bashrc
