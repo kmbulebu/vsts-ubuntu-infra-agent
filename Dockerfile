@@ -5,6 +5,9 @@ RUN echo "deb [arch=amd64] http://apt-mo.trafficmanager.net/repos/dotnet-release
  && apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893 \
  && apt-get update \
  && apt-get install -y --no-install-recommends \
+    apt-transport-https \
+    # locales
+    locales \
     # Basic utilities
     curl \
     dnsutils \
@@ -42,6 +45,14 @@ RUN echo "deb [arch=amd64] http://apt-mo.trafficmanager.net/repos/dotnet-release
     dotnet-dev-1.0.0-rc3-004530 \
  && rm -rf /var/lib/apt/lists/*
 
+# Setup locale
+RUN locale-gen en_US.UTF-8 \
+  && echo "LANG=en_US.UTF-8" >> /etc/default/locale
+
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
+
 # Install maven separately to avoid apt-get errors
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
@@ -59,6 +70,13 @@ RUN curl -sL https://git.io/n-install | bash -s -- -ny - \
  && ~/n/bin/n stable \
  && npm install -g bower grunt gulp n \
  && rm -rf ~/n
+
+ # Install MS SQL command line tools
+ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+  && curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | tee /etc/apt/sources.list.d/msprod.list \
+  && apt-get update -y \
+  && ACCEPT_EULA=Y apt-get install mssql-tools unixodbc-dev -y \
+  && rm -rf /var/lib/apt/lists/*
 
 # Configure environment variables
 ENV ANT_HOME=/usr/share/ant \
