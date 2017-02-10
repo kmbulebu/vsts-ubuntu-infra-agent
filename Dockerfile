@@ -40,8 +40,6 @@ RUN echo "deb [arch=amd64] http://apt-mo.trafficmanager.net/repos/dotnet-release
     golang \
     # .NET Core SDK
     dotnet-dev-1.0.0-rc3-004530 \
-    # For MS SQL Command line
-    apt-transport-https \
  && rm -rf /var/lib/apt/lists/*
 
 # Install maven separately to avoid apt-get errors
@@ -61,16 +59,6 @@ RUN curl -sL https://git.io/n-install | bash -s -- -ny - \
  && ~/n/bin/n stable \
  && npm install -g bower grunt gulp n \
  && rm -rf ~/n
-
- # Install MS SQL command line tools
- RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-  && curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | tee /etc/apt/sources.list.d/msprod.list \
-  && apt-get update -y \
-  && ACCEPT_EULA=Y apt-get install mssql-tools unixodbc-dev -y \
-  && apt-get install -y language-pack-pt-base \
-  && locale-gen en_US.UTF-8 \
-  && dpkg-reconfigure -f noninteractive locales \
-  && echo "LANG=en_US.UTF-8" >> /etc/default/locale \
 
 # Configure environment variables
 ENV ANT_HOME=/usr/share/ant \
