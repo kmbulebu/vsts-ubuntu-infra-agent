@@ -107,6 +107,10 @@ RUN pip install sslyze
 RUN curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk -v 1.2.22
 ENV CHEFDK=1.2.22
 
+# Add gems for chef
+COPY Gemfile Gemfile
+RUN chef exec bundle install && rm -f Gemfile
+
 # Diable telemetry
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 
