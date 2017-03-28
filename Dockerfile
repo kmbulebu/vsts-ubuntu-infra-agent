@@ -86,7 +86,8 @@ ENV ANT_HOME=/usr/share/ant \
     grunt=/usr/local/bin/grunt \
     JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 \
     M2_HOME=/usr/share/maven \
-    GOPATH=/go
+    GOPATH=/go \
+    chef=/usr/bin/chef
 
 # Install gauntlt, arachni
 RUN gem install gauntlt arachni --no-ri
@@ -101,6 +102,13 @@ RUN /usr/bin/go get github.com/FiloSottile/Heartbleed
 RUN pip install --upgrade pip
 RUN pip install sqlmap
 RUN pip install sslyze
+
+# Install Chef
+RUN curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk -v 1.2.22
+ENV CHEFDK=1.2.22
+
+# Diable telemetry
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 # Forces first run which downloads and unpacks some stuff.
 RUN /usr/bin/dotnet msbuild /version
