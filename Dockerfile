@@ -1,4 +1,4 @@
-FROM microsoft/vsts-agent:ubuntu-16.04-docker-1.12.1
+FROM microsoft/vsts-agent:ubuntu-16.04-docker-17.03.0-ce
 
 # Install packages
 RUN echo "deb [arch=amd64] http://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list \
@@ -42,7 +42,7 @@ RUN echo "deb [arch=amd64] http://apt-mo.trafficmanager.net/repos/dotnet-release
     nmap \
     golang \
     # .NET Core SDK
-    dotnet-dev-1.0.0-rc3-004530 \
+    dotnet-dev-1.0.1 \
  && rm -rf /var/lib/apt/lists/*
 
 # Setup locale
